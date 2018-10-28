@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#6F00EE</color>
+    <color name="colorPrimaryDark">#5c02c4</color>
+    <color name="colorAccent">#1588ef</color>
+
+    <color name="colorPrimaryDark_">#252229</color>
+    <color name="colorWhite">#fff</color>
+    <color name="colorBlack">#000</color>
+    <color name="colorBlackTrans">#60000000</color>
+    <color name="colorBlackTransE">#89000000</color>
+    <color name="colorBlackTrans__">#700d250f</color>
+    <color name="colorBlackTrans_">#603e3c12</color>
+    <color name="colorDark">#012104</color>
+    <color name="colorGray">#bbb</color>
+    <color name="colorGray_">#aaa</color>
+    <color name="colorDarkGray">#666</color>
+    <color name="colorLightGray">#ccc</color>
+    <color name="colorLightGrayEEE">#eaeaea</color>
+    <color name="colorContentBG">#f7f7f7</color>
+    <color name="colorTotalBG">#f8fff7</color>
+    <color name="colorBtnLightGray">#f2f2f2</color>
+    <color name="colorRed">#f54545</color>
+    <color name="colorGreen">#6aae4e</color>
+    <color name="colorShadowTrans">#33000000</color>
+
+    <color name="colorBtnClay">#ed850d</color>
+    <color name="colorMaroon">#DC4117</color>
+    <color name="colorBtnRed">#d6174d</color>
+    <color name="colorBtnGray">#585757</color>
+    <color name="colorPrimaryNFC">#0ccf1c</color>
+    <color name="colorGradientMiddle">#FF8621EE</color>
+    <color name="colorGradientEnd">#9743ef</color>
+    <color name="separatorColor">#f0f4f5</color>
+</resources>
