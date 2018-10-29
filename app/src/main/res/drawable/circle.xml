@@ -3,7 +3,7 @@
 	android:shape="rectangle">
 
 	<corners
-		android:bottomRightRadius="@dimen/_8sdp"
+		android:bottomRightRadius="@dimen/_1sdp"
 		android:radius="@dimen/_30sdp" />
 
 	<gradient
@@ -13,11 +13,11 @@
 		android:type="linear" />
 
 	<size
-		android:width="@dimen/_10sdp"
-		android:height="@dimen/_10sdp" />
+		android:width="@dimen/_11sdp"
+		android:height="@dimen/_11sdp" />
 
 	<stroke
 		android:width="0.5dip"
-		android:color="@color/colorBlack" />
+		android:color="@color/colorWhite" />
 
 </shape>

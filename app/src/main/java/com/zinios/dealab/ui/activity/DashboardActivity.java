@@ -1,11 +1,14 @@
 package com.zinios.dealab.ui.activity;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
@@ -195,7 +198,20 @@ public class DashboardActivity extends BaseActivity implements OnMapReadyCallbac
 	@Override
 	public void onMapReady(GoogleMap googleMap) {
 		mMap = googleMap;
+		mMap.getUiSettings().setCompassEnabled(false);
+		if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+				== PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+			mMap.setMyLocationEnabled(false);
+		}
+		mMap.getUiSettings().setMyLocationButtonEnabled(false);
 		setUpCluster();
+		mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+			@Override
+			public boolean onMarkerClick(Marker marker) {
+				mClusterManager.onMarkerClick(marker);
+				return true;
+			}
+		});
 	}
 
 	private BitmapDescriptor getMarkerIconFromDrawable(String key, Bitmap bitmap) {
