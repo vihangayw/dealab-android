@@ -15,8 +15,8 @@ public class Ancestor<T> {
 
 	@JsonCreator
 	Ancestor(@JsonProperty("message") String message,
-	                   @JsonProperty("status") int status,
-	                   @JsonProperty("data") T data) {
+	         @JsonProperty("statusCode") int status,
+	         @JsonProperty("data") T data) {
 		this.message = message;
 		this.data = data;
 		this.status = status;

@@ -2,12 +2,11 @@ package com.zinios.dealab.api;
 
 public class APIURLHelper {
 
-	private static final String BASE_URL = "http://devz.ceffectz.com/empzonar";
-	private static final String MOBILE = "/mobile";
+	private static final String BASE_URL = "http://192.168.8.101:9000/v1/deal";
 
-	private static final String LOGIN = "/login";
+	private static final String ALL_LOCATIONS = "/map-all";
 
-//	public static String getProfileImageUrl(String image) {
-//		return BASE_URL.concat(PROFILE_IMAGE).concat(image);
-//	}
+	public static String getAllLocationsURL() {
+		return BASE_URL.concat(ALL_LOCATIONS);
+	}
 }

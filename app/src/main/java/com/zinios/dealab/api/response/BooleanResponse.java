@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class BooleanResponse extends Ancestor<Boolean> {
 	BooleanResponse(@JsonProperty("message") String message,
 	                @JsonProperty("data") Boolean data,
-	                @JsonProperty("status") int code) {
+	                @JsonProperty("statusCode") int code) {
 		super(message, code, data);
 	}
 }

@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.zinios.dealab.BuildConfig;
-import com.zinios.dealab.CZApplication;
+import com.zinios.dealab.DealabApplication;
 
 public class UserSessionManager {
 
@@ -15,7 +15,7 @@ public class UserSessionManager {
 
 
 	private final static UserSessionManager instance =
-			new UserSessionManager(CZApplication.getInstance().getApplicationContext());
+			new UserSessionManager(DealabApplication.getInstance().getApplicationContext());
 
 	private final SharedPreferences pref;
 	private final SharedPreferences.Editor editor;

@@ -6,7 +6,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.zinios.dealab.CZApplication;
+import com.zinios.dealab.DealabApplication;
 import com.zinios.dealab.api.response.Error;
 import com.zinios.dealab.util.UserSessionManager;
 
@@ -33,7 +33,7 @@ public class VolleySingleton {
 	private RequestQueue mRequestQueue;
 
 	private VolleySingleton() {
-		mRequestQueue = Volley.newRequestQueue(CZApplication.getInstance());
+		mRequestQueue = Volley.newRequestQueue(DealabApplication.getInstance());
 	}
 
 	/**
@@ -59,7 +59,7 @@ public class VolleySingleton {
 	 */
 	private RequestQueue getRequestQueue() {
 		if (mRequestQueue == null) {
-			mRequestQueue = Volley.newRequestQueue(CZApplication.getInstance());
+			mRequestQueue = Volley.newRequestQueue(DealabApplication.getInstance());
 		}
 		return mRequestQueue;
 	}

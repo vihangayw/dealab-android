@@ -19,12 +19,12 @@ import com.zinios.dealab.util.UserSessionManager;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CZApplication extends MultiDexApplication {
-	private static final String TAG = CZApplication.class.getSimpleName();
-	private static CZApplication application;
+public class DealabApplication extends MultiDexApplication {
+	private static final String TAG = DealabApplication.class.getSimpleName();
+	private static DealabApplication application;
 	private final List<NetworkListener> networkListeners = new ArrayList<>();
 
-	public static CZApplication getInstance() {
+	public static DealabApplication getInstance() {
 		return application;
 	}
 
@@ -87,7 +87,7 @@ public class CZApplication extends MultiDexApplication {
 
 	public boolean isNetworkConnected() {
 		ConnectivityManager cm =
-				(ConnectivityManager) CZApplication.getInstance().getApplicationContext()
+				(ConnectivityManager) DealabApplication.getInstance().getApplicationContext()
 						.getSystemService(Context.CONNECTIVITY_SERVICE);
 		if (cm != null) {
 			NetworkInfo activeNetwork = cm.getActiveNetworkInfo();

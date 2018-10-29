@@ -20,7 +20,8 @@
     <color name="colorContentBG">#f7f7f7</color>
     <color name="colorTotalBG">#f8fff7</color>
     <color name="colorBtnLightGray">#f2f2f2</color>
-    <color name="colorRed">#f54545</color>
+	<color name="colorRed">#c90303</color>
+	<color name="colorRedDark">#930000</color>
     <color name="colorGreen">#6aae4e</color>
     <color name="colorShadowTrans">#33000000</color>
 

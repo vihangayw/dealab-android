@@ -12,7 +12,7 @@ public class Error extends Ancestor<String> {
 
 	public Error(@JsonProperty("message") String message,
 	             @JsonProperty("data") String data,
-	             @JsonProperty("status") int status) {
+	             @JsonProperty("statusCode") int status) {
 		super(message, status, data);
 	}
 

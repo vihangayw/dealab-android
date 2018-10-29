@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-import com.zinios.dealab.CZApplication;
+import com.zinios.dealab.DealabApplication;
 import com.zinios.dealab.listener.NetworkListener;
 
 import java.util.List;
@@ -17,7 +17,7 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
 	public void onReceive(Context context, Intent intent) {
 		try {
 			boolean online = isOnline(context);
-			List<NetworkListener> networkListeners = CZApplication.getInstance().getNetworkListeners();
+			List<NetworkListener> networkListeners = DealabApplication.getInstance().getNetworkListeners();
 			for (NetworkListener listener : networkListeners) {
 				listener.onNetworkChange(online);
 			}
