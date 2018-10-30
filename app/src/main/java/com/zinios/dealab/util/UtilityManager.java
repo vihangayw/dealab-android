@@ -4,16 +4,18 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.location.LocationManager;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.View;
 
-import com.zinios.dealab.R;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.zinios.dealab.R;
 
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 public class UtilityManager {
 
@@ -25,6 +27,14 @@ public class UtilityManager {
 		snackbar.show();
 	}
 
+	public static boolean hasGPSDevice(Context context) {
+		final LocationManager mgr = (LocationManager) context
+				.getSystemService(Context.LOCATION_SERVICE);
+		if (mgr == null)
+			return false;
+		final List<String> providers = mgr.getAllProviders();
+		return providers != null && providers.contains(LocationManager.GPS_PROVIDER);
+	}
 	public static AlertDialog showAlert(final Context context, String title, String msg, String btnPositive,
 	                                    String btnNegative, boolean cancelable,
 	                                    DialogInterface.OnClickListener positiveClick,

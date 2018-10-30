@@ -29,7 +29,8 @@
     <color name="colorMaroon">#DC4117</color>
     <color name="colorBtnRed">#d6174d</color>
     <color name="colorBtnGray">#585757</color>
-    <color name="colorPrimaryNFC">#0ccf1c</color>
+    <color name="colorPrimaryGreen">#0ccf1c</color>
+    <color name="colorPrimaryGreen_">#023506</color>
     <color name="colorGradientMiddle">#FF8621EE</color>
     <color name="colorGradientEnd">#9743ef</color>
     <color name="separatorColor">#f0f4f5</color>

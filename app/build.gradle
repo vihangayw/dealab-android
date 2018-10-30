@@ -91,6 +91,9 @@ dependencies {
     implementation 'com.github.esafirm.android-image-picker:imagepicker:1.8.0'
     implementation 'com.thefinestartist:finestwebview:1.2.7'
     implementation 'com.kaopiz:kprogresshud:1.0.2'
+    implementation 'com.google.android.gms:play-services-location:16.0.0'
+    implementation 'com.google.android.gms:play-services-places:16.0.0'
+    implementation 'com.google.android.gms:play-services-maps:16.0.0'
 }
 
 static def getDate() {
