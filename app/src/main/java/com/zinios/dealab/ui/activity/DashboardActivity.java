@@ -18,6 +18,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Looper;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -35,6 +36,8 @@ import android.view.animation.LinearInterpolator;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.florent37.viewanimator.AnimationListener;
+import com.github.florent37.viewanimator.ViewAnimator;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -97,6 +100,8 @@ public class DashboardActivity extends BaseActivity implements
 	DrawerLayout drawer;
 	@BindView(R.id.coordinator)
 	CoordinatorLayout coordinatorLayout;
+	@BindView(R.id.txt_pop_bubble)
+	TextView txtBubble;
 
 	private GoogleMap mMap;
 
@@ -111,6 +116,13 @@ public class DashboardActivity extends BaseActivity implements
 	private Marker mPositionMarker;
 	private LatLng mLatLng;
 	private APIHelper.PostManResponseListener locationAPIListener;
+	private Handler bubbleHandler = new Handler();
+	private Runnable runnableBubble = new Runnable() {
+		@Override
+		public void run() {
+			hidePopBubble();
+		}
+	};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -157,6 +169,7 @@ public class DashboardActivity extends BaseActivity implements
 	@Override
 	void initializeViews() {
 		super.initializeViews();
+		txtBubble.setVisibility(View.INVISIBLE);
 		SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
 				.findFragmentById(R.id.map);
 		if (mapFragment != null)
@@ -171,6 +184,13 @@ public class DashboardActivity extends BaseActivity implements
 		super.onStart();
 
 		enableLocation();
+	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+		bubbleHandler.removeCallbacks(runnableBubble);
+		hidePopBubble();
 	}
 
 	@OnClick(R.id.fab_location)
@@ -364,12 +384,20 @@ public class DashboardActivity extends BaseActivity implements
 		// mMap.clear();
 		markerLocations.clear();
 
+		int dealCount = 0;
 		for (MapLocation location : data) {
 			MarkerItem markerItem = new MarkerItem(new MarkerOptions()
 					.position(new LatLng(location.getLat(), location.getLng())), location);
 			markerLocations.add(markerItem);
+			dealCount += location.getDealCount();
+		}
+		if (dealCount == 0) {
+			txtBubble.setText(R.string.no_data);
+		} else {
+			txtBubble.setText(String.valueOf(dealCount).concat(" ").concat(getString(R.string.promos)));
 		}
 
+		animatePopBubble();
 		if (mClusterManager != null) {
 			if (!markerLocations.isEmpty())
 				mClusterManager.addItems(markerLocations);
@@ -574,6 +602,33 @@ public class DashboardActivity extends BaseActivity implements
 
 	}
 
+	private void animatePopBubble() {
+		bubbleHandler.removeCallbacks(runnableBubble);
+		bubbleHandler.postDelayed(runnableBubble, 6000);
+		if (txtBubble.getVisibility() == View.VISIBLE) return;
+		ViewAnimator.animate(txtBubble)
+				.translationX(-txtBubble.getWidth(), 0)
+				.duration(500)
+				.start();
+		txtBubble.setVisibility(View.VISIBLE);
+	}
+
+	private void hidePopBubble() {
+		if (txtBubble.getVisibility() == View.INVISIBLE || animating) return;
+		animating = true;
+		ViewAnimator.animate(txtBubble)
+				.translationX(0, -txtBubble.getWidth())
+				.duration(500)
+				.onStop(new AnimationListener.Stop() {
+					@Override
+					public void onStop() {
+						animating = false;
+						txtBubble.setVisibility(View.INVISIBLE);
+					}
+				})
+				.start();
+	}
+
 	public class ClusterRenderer extends DefaultClusterRenderer<MarkerItem> implements
 			GoogleMap.OnCameraIdleListener {
 		private TextView title;
@@ -656,15 +711,15 @@ public class DashboardActivity extends BaseActivity implements
 		@Override
 		public void onCameraIdle() {
 			if (mMap.getCameraPosition().zoom >= 17.3) {
-				new GetNearbyLocation().execute();
+				new GetNearbyLocation(mMap.getCameraPosition().target).execute();
 			} else if (mMap.getCameraPosition().zoom >= 13 && mMap.getCameraPosition().zoom <= 17.2) {
-				new GetNearbyLocation().execute();
+				new GetNearbyLocation(mMap.getCameraPosition().target).execute();
 			} else if (cameraPos == mMap.getCameraPosition().zoom && mMap.getCameraPosition().zoom >= 13
 					&& mMap.getCameraPosition().zoom <= 17.2) {
 				Location mapLocation = new Location("");
 				mapLocation.setLongitude(mMap.getCameraPosition().target.longitude);
 				mapLocation.setLatitude(mMap.getCameraPosition().target.latitude);
-				new GetNearbyLocation().execute();
+				new GetNearbyLocation(mMap.getCameraPosition().target).execute();
 			} else if (mMap.getCameraPosition().zoom <= 12) {
 				new GetAllLocation().execute();
 			}
@@ -696,7 +751,7 @@ public class DashboardActivity extends BaseActivity implements
 			super.onPreExecute();
 			if (mClusterManager != null)
 				mClusterManager.clearItems();
-
+			txtBubble.setText(R.string.updating);
 		}
 
 		protected void onProgressUpdate(Integer... progress) {
@@ -709,10 +764,17 @@ public class DashboardActivity extends BaseActivity implements
 
 	@SuppressLint("StaticFieldLeak")
 	private class GetNearbyLocation extends AsyncTask<String, Integer, Long> {
+		LatLng target;
+
+		GetNearbyLocation(LatLng target) {
+			this.target = target;
+		}
+
 		protected Long doInBackground(String... urls) {
-			if (mLatLng != null)
-				new LocationRequestHelperImpl().locationsBoundary(mLatLng.latitude, mLatLng.longitude,
+			if (target != null) {
+				new LocationRequestHelperImpl().locationsBoundary(target.latitude, target.longitude,
 						locationAPIListener);
+			}
 			return 1L;
 		}
 
@@ -721,7 +783,7 @@ public class DashboardActivity extends BaseActivity implements
 			super.onPreExecute();
 			if (mClusterManager != null)
 				mClusterManager.clearItems();
-
+			txtBubble.setText(R.string.updating);
 		}
 
 		protected void onProgressUpdate(Integer... progress) {
@@ -729,6 +791,7 @@ public class DashboardActivity extends BaseActivity implements
 		}
 
 		protected void onPostExecute(Long result) {
+			animatePopBubble();
 		}
 	}
 }

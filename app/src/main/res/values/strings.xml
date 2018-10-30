@@ -1,5 +1,5 @@
 <resources>
-	<string name="app_name">dealab-andriod</string>
+	<string name="app_name">dealab-android</string>
 	<string name="no_network">No Network</string>
 	<string name="title_activity_main">MainActivity</string>
 	<string name="navigation_drawer_open">Open navigation drawer</string>
@@ -12,4 +12,7 @@
 	<string name="please_wait">Please wait..</string>
 	<string name="gps_error">No GPS!</string>
 	<string name="on_permission_deny">Go to settings and allow permission</string>
+	<string name="no_data">No Data</string>
+	<string name="promos">promotions</string>
+	<string name="updating">Updating…</string>
 </resources>
