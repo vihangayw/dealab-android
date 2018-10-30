@@ -30,6 +30,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
@@ -39,6 +40,8 @@ import android.widget.Toast;
 import com.github.florent37.viewanimator.AnimationListener;
 import com.github.florent37.viewanimator.ViewAnimator;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResolvableApiException;
@@ -49,7 +52,9 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.Places;
+import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -58,6 +63,7 @@ import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -95,6 +101,8 @@ public class DashboardActivity extends BaseActivity implements
 	private static final String TAG = DashboardActivity.class.getSimpleName();
 	private final int MY_PERMISSIONS_REQUEST_LOCATION = 33;
 	private final int LOCATION_ENABLE = 4910;
+	private final int PLACE_PICKER_REQUEST = 101;
+
 
 	@BindView(R.id.drawer_layout)
 	DrawerLayout drawer;
@@ -123,6 +131,7 @@ public class DashboardActivity extends BaseActivity implements
 			hidePopBubble();
 		}
 	};
+	private Marker mSearchMarker;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -195,8 +204,25 @@ public class DashboardActivity extends BaseActivity implements
 
 	@OnClick(R.id.fab_location)
 	void myLocationClick() {
+		if (mSearchMarker != null) mSearchMarker.remove();
 		if (mLatLng != null) {
 			animateCamera(mLatLng, 550);
+		}
+	}
+
+	@OnClick(R.id.btn_toggle)
+	void toggle() {
+		drawer.openDrawer(Gravity.START);
+	}
+
+	@OnClick(R.id.search_layout)
+	void searchClicked() {
+		if (mMap == null) return;
+		PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+		try {
+			startActivityForResult(builder.build(this), PLACE_PICKER_REQUEST);
+		} catch (GooglePlayServicesRepairableException | GooglePlayServicesNotAvailableException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -235,39 +261,38 @@ public class DashboardActivity extends BaseActivity implements
 	}
 
 	private void enableLocationServices() {
-		if (mGoogleApiClient == null) {
+		if (mGoogleApiClient == null)
 			buildGoogleApiClient();
 
-			LocationRequest locationRequest = LocationRequest.create();
-			locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-			locationRequest.setInterval(30 * 1000);
-			locationRequest.setFastestInterval(5 * 1000);
-			LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
-					.addLocationRequest(locationRequest);
+		LocationRequest locationRequest = LocationRequest.create();
+		locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+		locationRequest.setInterval(30 * 1000);
+		locationRequest.setFastestInterval(5 * 1000);
+		LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
+				.addLocationRequest(locationRequest);
 
-			builder.setAlwaysShow(true);
-			Task<LocationSettingsResponse> result =
-					LocationServices.getSettingsClient(this).checkLocationSettings(builder.build());
-			result.addOnCompleteListener(new OnCompleteListener<LocationSettingsResponse>() {
-				@Override
-				public void onComplete(@NonNull Task<LocationSettingsResponse> task) {
-					try {
-						task.getResult(ApiException.class);
-					} catch (ApiException exception) {
-						switch (exception.getStatusCode()) {
-							case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-								try {
-									ResolvableApiException resolvable = (ResolvableApiException) exception;
-									resolvable.startResolutionForResult(DashboardActivity.this, LOCATION_ENABLE);
-								} catch (IntentSender.SendIntentException | ClassCastException e) {
-									Log.d(TAG, e.getMessage());
-								}
-								break;
-						}
+		builder.setAlwaysShow(true);
+		Task<LocationSettingsResponse> result =
+				LocationServices.getSettingsClient(this).checkLocationSettings(builder.build());
+		result.addOnCompleteListener(new OnCompleteListener<LocationSettingsResponse>() {
+			@Override
+			public void onComplete(@NonNull Task<LocationSettingsResponse> task) {
+				try {
+					task.getResult(ApiException.class);
+				} catch (ApiException exception) {
+					switch (exception.getStatusCode()) {
+						case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+							try {
+								ResolvableApiException resolvable = (ResolvableApiException) exception;
+								resolvable.startResolutionForResult(DashboardActivity.this, LOCATION_ENABLE);
+							} catch (IntentSender.SendIntentException | ClassCastException e) {
+								Log.d(TAG, e.getMessage());
+							}
+							break;
 					}
 				}
-			});
-		}
+			}
+		});
 	}
 
 	/**
@@ -283,6 +308,7 @@ public class DashboardActivity extends BaseActivity implements
 				.addApi(Places.PLACE_DETECTION_API)
 				.build();
 		mGoogleApiClient.connect();
+		enableLocation();
 	}
 
 	/**
@@ -374,6 +400,31 @@ public class DashboardActivity extends BaseActivity implements
 					default:
 						break;
 				}
+				break;
+			case PLACE_PICKER_REQUEST:
+				if (resultCode == RESULT_OK) {
+					Place place = PlacePicker.getPlace(this, data);
+					animateCamera(place.getLatLng(), 1000);
+
+					if (distanceBetween(place.getLatLng().latitude, place.getLatLng().longitude) > 400) {
+						if (mSearchMarker != null) {
+							mSearchMarker.remove();
+							mSearchMarker = null;
+						}
+						Drawable circleDrawable = UtilityManager.resizeImage(this, R.drawable.pin,
+								(int) getResources().getDimension(R.dimen._20sdp),
+								(int) getResources().getDimension(R.dimen._29sdp));
+						BitmapDescriptor markerIcon = getMarkerIconFromDrawable(circleDrawable);
+						mSearchMarker = mMap.addMarker(new MarkerOptions()
+								.position(place.getLatLng())
+								.anchor(0.5f, 0.5f)
+								.icon(markerIcon));
+					} else if (mSearchMarker != null) {
+						mSearchMarker.remove();
+						mSearchMarker = null;
+					}
+				}
+
 				break;
 		}
 	}
@@ -470,6 +521,7 @@ public class DashboardActivity extends BaseActivity implements
 	@Override
 	public void onMapReady(GoogleMap googleMap) {
 		mMap = googleMap;
+		googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.map_style));
 		//mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
 		mMap.getUiSettings().setMyLocationButtonEnabled(false);
 		mMap.getUiSettings().setCompassEnabled(false);
@@ -629,114 +681,15 @@ public class DashboardActivity extends BaseActivity implements
 				.start();
 	}
 
-	public class ClusterRenderer extends DefaultClusterRenderer<MarkerItem> implements
-			GoogleMap.OnCameraIdleListener {
-		private TextView title;
-		private View multiProfile;
-		private Context mContext;
+	private double distanceBetween(double lat, double lng) {
+		if (mLastLocation == null)
+			return 0;
 
-		private ClusterRenderer(Context context, GoogleMap map,
-		                        ClusterManager<MarkerItem> clusterManager) {
-			super(context, map, clusterManager);
-			this.mContext = context;
-		}
+		Location loc2 = new Location("");
+		loc2.setLatitude(lat);
+		loc2.setLongitude(lng);
 
-
-		@Override
-		protected void onBeforeClusterItemRendered(final MarkerItem item,
-		                                           final MarkerOptions markerOptions) {
-			runOnUiThread(new Runnable() {
-				@Override
-				public void run() {
-
-					multiProfile = LayoutInflater.from(mContext).inflate(R.layout.marker_layout, null);
-					title = multiProfile.findViewById(R.id.title);
-					title.setText(item.getMapLocation().getCompany()
-							.concat("\n")
-							.concat(String.valueOf(item.getMapLocation().getDealCount())
-									.concat(" Available")));
-					title.setVisibility(
-							mMap.getCameraPosition().zoom >= 17.3 ?
-									View.VISIBLE : View.GONE);
-					String key = "key" + (mMap.getCameraPosition().zoom >= 17.3);
-
-					multiProfile.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
-							View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-					multiProfile.layout(0, 0, multiProfile.getMeasuredWidth(), multiProfile.getMeasuredHeight());
-
-					BitmapDescriptor markerIconFromDrawable2 = getMarkerIconFromDrawable(key, loadBitmapFromView(multiProfile));
-					markerOptions
-							.position(item.getPosition())
-							.icon(markerIconFromDrawable2)
-							.draggable(false);
-
-				}
-			});
-		}
-
-		private Bitmap loadBitmapFromView(View view) {
-			//Get the dimensions of the view so we can re-layout the view at its current size
-			// and create a bitmap of the same size
-			int width = view.getWidth();
-			int height = view.getHeight();
-
-			int measuredWidth = View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY);
-			int measuredHeight = View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY);
-
-			//Cause the view to re-layout
-			view.measure(measuredWidth, measuredHeight);
-			view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
-
-			//Create a bitmap backed Canvas to draw the view into
-			Bitmap b = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-			Canvas c = new Canvas(b);
-
-			//Now that the view is laid out and we have a canvas, ask the view to draw itself into the canvas
-			view.draw(c);
-
-			return b;
-		}
-
-
-		@Override
-		protected void onClusterItemRendered(MarkerItem clusterItem, Marker marker) {
-			super.onClusterItemRendered(clusterItem, marker);
-		}
-
-		@Override
-		protected void onBeforeClusterRendered(Cluster<MarkerItem> cluster, MarkerOptions markerOptions) {
-			super.onBeforeClusterRendered(cluster, markerOptions);
-		}
-
-		@Override
-		public void onCameraIdle() {
-			if (mMap.getCameraPosition().zoom >= 17.3) {
-				new GetNearbyLocation(mMap.getCameraPosition().target).execute();
-			} else if (mMap.getCameraPosition().zoom >= 13 && mMap.getCameraPosition().zoom <= 17.2) {
-				new GetNearbyLocation(mMap.getCameraPosition().target).execute();
-			} else if (cameraPos == mMap.getCameraPosition().zoom && mMap.getCameraPosition().zoom >= 13
-					&& mMap.getCameraPosition().zoom <= 17.2) {
-				Location mapLocation = new Location("");
-				mapLocation.setLongitude(mMap.getCameraPosition().target.longitude);
-				mapLocation.setLatitude(mMap.getCameraPosition().target.latitude);
-				new GetNearbyLocation(mMap.getCameraPosition().target).execute();
-			} else if (mMap.getCameraPosition().zoom <= 12) {
-				new GetAllLocation().execute();
-			}
-			cameraPos = mMap.getCameraPosition().zoom;
-
-			if (mMap.getCameraPosition().zoom < 14) {
-				runOnUiThread(new Runnable() {
-					@Override
-					public void run() {
-//						hideInfoWindow = true;
-//						if (mCurrentMarkerInfo != null) {
-//							mCurrentMarkerInfo.remove();
-//						}
-					}
-				});
-			}
-		}
+		return mLastLocation.distanceTo(loc2);
 	}
 
 	@SuppressLint("StaticFieldLeak")
@@ -792,6 +745,117 @@ public class DashboardActivity extends BaseActivity implements
 
 		protected void onPostExecute(Long result) {
 			animatePopBubble();
+		}
+	}
+
+	public class ClusterRenderer extends DefaultClusterRenderer<MarkerItem> implements
+			GoogleMap.OnCameraIdleListener {
+		private TextView title;
+		private View multiProfile;
+		private Context mContext;
+
+		private ClusterRenderer(Context context, GoogleMap map,
+		                        ClusterManager<MarkerItem> clusterManager) {
+			super(context, map, clusterManager);
+			this.mContext = context;
+		}
+
+
+		@Override
+		protected void onBeforeClusterItemRendered(final MarkerItem item,
+		                                           final MarkerOptions markerOptions) {
+			runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+
+					multiProfile = LayoutInflater.from(mContext).inflate(R.layout.marker_layout, null);
+					title = multiProfile.findViewById(R.id.title);
+					title.setText(item.getMapLocation().getCompany()
+							.concat("\n")
+							.concat(String.valueOf(item.getMapLocation().getDealCount())
+									.concat(" Available")));
+					title.setVisibility(
+							mMap.getCameraPosition().zoom >= 17.3 ?
+									View.VISIBLE : View.GONE);
+					String key = "key" + (mMap.getCameraPosition().zoom >= 17.3) + item.getMapLocation().getBranchId();
+
+					multiProfile.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+							View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+					multiProfile.layout(0, 0, multiProfile.getMeasuredWidth(), multiProfile.getMeasuredHeight());
+
+					BitmapDescriptor markerIconFromDrawable2 = getMarkerIconFromDrawable(key, loadBitmapFromView(multiProfile));
+					markerOptions
+							.position(item.getPosition())
+							.icon(markerIconFromDrawable2)
+							.draggable(false);
+
+				}
+			});
+		}
+
+		private Bitmap loadBitmapFromView(View view) {
+			//Get the dimensions of the view so we can re-layout the view at its current size
+			// and create a bitmap of the same size
+			int width = view.getWidth();
+			int height = view.getHeight();
+
+			int measuredWidth = View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY);
+			int measuredHeight = View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY);
+
+			//Cause the view to re-layout
+			view.measure(measuredWidth, measuredHeight);
+			view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
+
+			//Create a bitmap backed Canvas to draw the view into
+			Bitmap b = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+			Canvas c = new Canvas(b);
+
+			//Now that the view is laid out and we have a canvas, ask the view to draw itself into the canvas
+			view.draw(c);
+
+			return b;
+		}
+
+
+		@Override
+		protected void onClusterItemRendered(MarkerItem clusterItem, Marker marker) {
+			super.onClusterItemRendered(clusterItem, marker);
+		}
+
+		@Override
+		protected void onBeforeClusterRendered(Cluster<MarkerItem> cluster, MarkerOptions markerOptions) {
+			super.onBeforeClusterRendered(cluster, markerOptions);
+		}
+
+		@Override
+		public void onCameraIdle() {
+			if (mLastLocation == null) return;
+			if (mMap.getCameraPosition().zoom >= 17.3) {
+				new GetNearbyLocation(mMap.getCameraPosition().target).execute();
+			} else if (mMap.getCameraPosition().zoom >= 13 && mMap.getCameraPosition().zoom <= 17.2) {
+				new GetNearbyLocation(mMap.getCameraPosition().target).execute();
+			} else if (cameraPos == mMap.getCameraPosition().zoom && mMap.getCameraPosition().zoom >= 13
+					&& mMap.getCameraPosition().zoom <= 17.2) {
+				Location mapLocation = new Location("");
+				mapLocation.setLongitude(mMap.getCameraPosition().target.longitude);
+				mapLocation.setLatitude(mMap.getCameraPosition().target.latitude);
+				new GetNearbyLocation(mMap.getCameraPosition().target).execute();
+			} else if (mMap.getCameraPosition().zoom <= 12) {
+				new GetAllLocation().execute();
+			}
+			cameraPos = mMap.getCameraPosition().zoom;
+
+			if (mMap.getCameraPosition().zoom < 14) {
+				runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+//						hideInfoWindow = true;
+//						if (mCurrentMarkerInfo != null) {
+//							mCurrentMarkerInfo.remove();
+//						}
+					}
+				});
+			}
 		}
 	}
 }
