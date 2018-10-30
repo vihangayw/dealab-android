@@ -15,4 +15,10 @@ public class LocationRequestHelperImpl implements LocationRequestHelper {
 		APIHelper.getInstance().sendJSONRequestsWithParams(listener, new AncestorLocationListtResponseFactory(),
 				GET, APIURLHelper.getAllLocationsURL(), new JSONObject());
 	}
+
+	@Override
+	public void locationsBoundary(double lat, double lng, APIHelper.PostManResponseListener listener) {
+		APIHelper.getInstance().sendJSONRequestsWithParams(listener, new AncestorLocationListtResponseFactory(),
+				GET, APIURLHelper.getNearLocationsURL(lat, lng), new JSONObject());
+	}
 }

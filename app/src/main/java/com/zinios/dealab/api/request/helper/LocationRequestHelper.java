@@ -11,4 +11,6 @@ public interface LocationRequestHelper {
 
 	void locationsAll(APIHelper.PostManResponseListener listener);
 
+	void locationsBoundary(double lat, double lng, APIHelper.PostManResponseListener listener);
+
 }

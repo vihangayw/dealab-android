@@ -110,6 +110,7 @@ public class DashboardActivity extends BaseActivity implements
 	private Location mLastLocation;
 	private Marker mPositionMarker;
 	private LatLng mLatLng;
+	private APIHelper.PostManResponseListener locationAPIListener;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -322,6 +323,22 @@ public class DashboardActivity extends BaseActivity implements
 	@Override
 	void setListeners() {
 		super.setListeners();
+		locationAPIListener = new APIHelper.PostManResponseListener() {
+			@Override
+			public void onResponse(Ancestor ancestor) {
+				if (ancestor instanceof LocationListResponse) {
+					List<MapLocation> data = ((LocationListResponse) ancestor).getData();
+					if (data != null) {
+						addMarkers(data);
+					}
+				}
+			}
+
+			@Override
+			public void onError(Error error) {
+				DealabApplication.getInstance().showError(error);
+			}
+		};
 	}
 
 	@Override
@@ -339,25 +356,6 @@ public class DashboardActivity extends BaseActivity implements
 				}
 				break;
 		}
-	}
-
-	private void fetchAllLocations() {
-		new LocationRequestHelperImpl().locationsAll(new APIHelper.PostManResponseListener() {
-			@Override
-			public void onResponse(Ancestor ancestor) {
-				if (ancestor instanceof LocationListResponse) {
-					List<MapLocation> data = ((LocationListResponse) ancestor).getData();
-					if (data != null) {
-						addMarkers(data);
-					}
-				}
-			}
-
-			@Override
-			public void onError(Error error) {
-				DealabApplication.getInstance().showError(error);
-			}
-		});
 	}
 
 	private void addMarkers(List<MapLocation> data) {
@@ -522,7 +520,7 @@ public class DashboardActivity extends BaseActivity implements
 		CameraPosition camPos = CameraPosition
 				.builder(mMap.getCameraPosition())// current Camera
 				.bearing(0)
-				.zoom(18)
+				.zoom(17.0f)
 				.target(latLng)
 				.build();
 		mMap.animateCamera(CameraUpdateFactory.newCameraPosition(camPos), delay, null);
@@ -574,29 +572,6 @@ public class DashboardActivity extends BaseActivity implements
 	@Override
 	public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
-	}
-
-	@SuppressLint("StaticFieldLeak")
-	private class GetAllLocation extends AsyncTask<String, Integer, Long> {
-		protected Long doInBackground(String... urls) {
-			fetchAllLocations();
-			return 1L;
-		}
-
-		@Override
-		protected void onPreExecute() {
-			super.onPreExecute();
-			if (mClusterManager != null)
-				mClusterManager.clearItems();
-
-		}
-
-		protected void onProgressUpdate(Integer... progress) {
-
-		}
-
-		protected void onPostExecute(Long result) {
-		}
 	}
 
 	public class ClusterRenderer extends DefaultClusterRenderer<MarkerItem> implements
@@ -681,18 +656,18 @@ public class DashboardActivity extends BaseActivity implements
 		@Override
 		public void onCameraIdle() {
 			if (mMap.getCameraPosition().zoom >= 17.3) {
-				//near by
+				new GetNearbyLocation().execute();
 			} else if (mMap.getCameraPosition().zoom >= 13 && mMap.getCameraPosition().zoom <= 17.2) {
-				//near by
+				new GetNearbyLocation().execute();
 			} else if (cameraPos == mMap.getCameraPosition().zoom && mMap.getCameraPosition().zoom >= 13
 					&& mMap.getCameraPosition().zoom <= 17.2) {
 				Location mapLocation = new Location("");
 				mapLocation.setLongitude(mMap.getCameraPosition().target.longitude);
 				mapLocation.setLatitude(mMap.getCameraPosition().target.latitude);
-				//near by
+				new GetNearbyLocation().execute();
 			} else if (mMap.getCameraPosition().zoom <= 12) {
 				new GetAllLocation().execute();
-		    }
+			}
 			cameraPos = mMap.getCameraPosition().zoom;
 
 			if (mMap.getCameraPosition().zoom < 14) {
@@ -707,6 +682,53 @@ public class DashboardActivity extends BaseActivity implements
 				});
 			}
 		}
+	}
 
+	@SuppressLint("StaticFieldLeak")
+	private class GetAllLocation extends AsyncTask<String, Integer, Long> {
+		protected Long doInBackground(String... urls) {
+			new LocationRequestHelperImpl().locationsAll(locationAPIListener);
+			return 1L;
+		}
+
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			if (mClusterManager != null)
+				mClusterManager.clearItems();
+
+		}
+
+		protected void onProgressUpdate(Integer... progress) {
+
+		}
+
+		protected void onPostExecute(Long result) {
+		}
+	}
+
+	@SuppressLint("StaticFieldLeak")
+	private class GetNearbyLocation extends AsyncTask<String, Integer, Long> {
+		protected Long doInBackground(String... urls) {
+			if (mLatLng != null)
+				new LocationRequestHelperImpl().locationsBoundary(mLatLng.latitude, mLatLng.longitude,
+						locationAPIListener);
+			return 1L;
+		}
+
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			if (mClusterManager != null)
+				mClusterManager.clearItems();
+
+		}
+
+		protected void onProgressUpdate(Integer... progress) {
+
+		}
+
+		protected void onPostExecute(Long result) {
+		}
 	}
 }
