@@ -494,7 +494,12 @@ public class DashboardActivity extends BaseActivity implements
 		mClusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<MarkerItem>() {
 			@Override
 			public boolean onClusterItemClick(final MarkerItem markerItem) {
-				Toast.makeText(DashboardActivity.this, "clcik", Toast.LENGTH_SHORT).show();
+				Intent intent = new Intent(DashboardActivity.this, PromoActivity.class);
+				Bundle bundle = new Bundle();
+				bundle.putInt("bid", (int) markerItem.getMapLocation().getBranchId());
+				bundle.putString("branch", markerItem.getMapLocation().getBranch());
+				intent.putExtras(bundle);
+				startActivity(intent);
 				return false;
 			}
 		});

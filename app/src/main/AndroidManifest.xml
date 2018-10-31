@@ -26,6 +26,7 @@
 		<activity
 			android:name=".ui.activity.DashboardActivity"
 			android:label="@string/title_activity_main"
+			android:screenOrientation="portrait"
 			android:theme="@style/AppTheme.NoActionBar">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
@@ -47,6 +48,16 @@
 			android:value="@string/google_maps_key" />
 
 		<activity android:name=".ui.activity.BaseActivity" />
+		<activity
+			android:name=".ui.activity.PromoActivity"
+			android:label="@string/title_activity_main"
+			android:screenOrientation="portrait"
+			android:theme="@style/AppTheme1.NoActionBar" />
+		<activity
+			android:name="com.thefinestartist.finestwebview.FinestWebViewActivity"
+			android:configChanges="keyboardHidden|orientation|screenSize"
+			android:screenOrientation="sensor"
+			android:theme="@style/FinestWebViewTheme.Light" />
 	</application>
 
 </manifest>
