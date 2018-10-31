@@ -23,17 +23,21 @@ import android.os.Looper;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -80,6 +84,7 @@ import com.zinios.dealab.api.response.Error;
 import com.zinios.dealab.api.response.LocationListResponse;
 import com.zinios.dealab.model.MapLocation;
 import com.zinios.dealab.model.MarkerItem;
+import com.zinios.dealab.ui.adapter.PromoAdapter;
 import com.zinios.dealab.util.UtilityManager;
 import com.zinios.dealab.widget.LatLngInterpolator;
 
@@ -96,20 +101,30 @@ public class DashboardActivity extends BaseActivity implements
 		OnMapReadyCallback,
 		GoogleApiClient.ConnectionCallbacks,
 		GoogleApiClient.OnConnectionFailedListener,
-		LocationListener {
+		LocationListener, PromoAdapter.OnComponentClickListener {
 
 	private static final String TAG = DashboardActivity.class.getSimpleName();
 	private final int MY_PERMISSIONS_REQUEST_LOCATION = 33;
 	private final int LOCATION_ENABLE = 4910;
 	private final int PLACE_PICKER_REQUEST = 101;
 
-
+	BottomSheetBehavior bottomSheetBehavior;
+	@BindView(R.id.bottom_sheet)
+	View bottomSheet;
+	@BindView(R.id.recycler_view)
+	RecyclerView recyclerView;
 	@BindView(R.id.drawer_layout)
 	DrawerLayout drawer;
 	@BindView(R.id.coordinator)
 	CoordinatorLayout coordinatorLayout;
 	@BindView(R.id.txt_pop_bubble)
 	TextView txtBubble;
+	@BindView(R.id.txt_size)
+	TextView txtSize;
+	@BindView(R.id.img_arrow)
+	ImageView imgArrow;
+	@BindView(R.id.fab_location)
+	View fabLocatoin;
 
 	private GoogleMap mMap;
 
@@ -132,6 +147,8 @@ public class DashboardActivity extends BaseActivity implements
 		}
 	};
 	private Marker mSearchMarker;
+	private PromoAdapter promoAdapter;
+	private boolean nearReq;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -178,6 +195,16 @@ public class DashboardActivity extends BaseActivity implements
 	@Override
 	void initializeViews() {
 		super.initializeViews();
+		promoAdapter = new PromoAdapter(this, null, this);
+		recyclerView.setLayoutManager(new LinearLayoutManager(this,
+				LinearLayoutManager.VERTICAL,
+				false));
+		recyclerView.setAdapter(promoAdapter);
+
+		bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+		bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+		bottomSheet.setVisibility(View.GONE);
+
 		txtBubble.setVisibility(View.INVISIBLE);
 		SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
 				.findFragmentById(R.id.map);
@@ -213,6 +240,18 @@ public class DashboardActivity extends BaseActivity implements
 	@OnClick(R.id.btn_toggle)
 	void toggle() {
 		drawer.openDrawer(Gravity.START);
+	}
+
+	@OnClick(R.id.txt_pop_bubble)
+	void popupClick() {
+		if (txtBubble.getText().toString().toLowerCase().contains("updat")) return;
+		if (txtBubble.getText().toString().toLowerCase().contains("no data")) return;
+		if (promoAdapter == null || promoAdapter.getItemCount() == 0) return;
+
+		hidePopBubble();
+		bottomSheet.setVisibility(View.VISIBLE);
+		fabLocatoin.setVisibility(View.INVISIBLE);
+		bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
 	}
 
 	@OnClick(R.id.search_layout)
@@ -369,6 +408,23 @@ public class DashboardActivity extends BaseActivity implements
 	@Override
 	void setListeners() {
 		super.setListeners();
+		bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+			@Override
+			public void onStateChanged(@NonNull View bottomSheet, int newState) {
+				if (newState == BottomSheetBehavior.STATE_COLLAPSED) {
+					imgArrow.setImageDrawable(
+							ContextCompat.getDrawable(DashboardActivity.this, R.drawable.ic_up));
+				} else if (newState == BottomSheetBehavior.STATE_EXPANDED) {
+					imgArrow.setImageDrawable(
+							ContextCompat.getDrawable(DashboardActivity.this, R.drawable.ic_down));
+				}
+			}
+
+			@Override
+			public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+
+			}
+		});
 		locationAPIListener = new APIHelper.PostManResponseListener() {
 			@Override
 			public void onResponse(Ancestor ancestor) {
@@ -376,6 +432,9 @@ public class DashboardActivity extends BaseActivity implements
 					List<MapLocation> data = ((LocationListResponse) ancestor).getData();
 					if (data != null) {
 						addMarkers(data);
+						if (nearReq) {
+							promoAdapter.setList(data);
+						}
 					}
 				}
 			}
@@ -444,8 +503,10 @@ public class DashboardActivity extends BaseActivity implements
 		}
 		if (dealCount == 0) {
 			txtBubble.setText(R.string.no_data);
+			txtSize.setText("0");
 		} else {
 			txtBubble.setText(String.valueOf(dealCount).concat(" ").concat(getString(R.string.promos)));
+			txtSize.setText(String.valueOf(dealCount));
 		}
 
 		animatePopBubble();
@@ -509,8 +570,20 @@ public class DashboardActivity extends BaseActivity implements
 	public void onBackPressed() {
 		if (drawer.isDrawerOpen(GravityCompat.START)) {
 			drawer.closeDrawer(GravityCompat.START);
+		} else if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
+			bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
 		} else {
 			super.onBackPressed();
+		}
+	}
+
+	@OnClick(R.id.layout_header)
+	void changeDraggerState() {
+		if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_DRAGGING) return;
+		if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
+			bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+		} else {
+			bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
 		}
 	}
 
@@ -660,6 +733,10 @@ public class DashboardActivity extends BaseActivity implements
 	}
 
 	private void animatePopBubble() {
+		bottomSheet.setVisibility(View.INVISIBLE);
+		fabLocatoin.setVisibility(View.VISIBLE);
+		bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+
 		bubbleHandler.removeCallbacks(runnableBubble);
 		bubbleHandler.postDelayed(runnableBubble, 6000);
 		if (txtBubble.getVisibility() == View.VISIBLE) return;
@@ -697,9 +774,28 @@ public class DashboardActivity extends BaseActivity implements
 		return mLastLocation.distanceTo(loc2);
 	}
 
+	@Override
+	public void onComponentClick(View itemView, int position) {
+		if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_DRAGGING)
+			return;
+		if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
+			bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+		}
+		if (promoAdapter != null && promoAdapter.getItemCount() > position) {
+			MapLocation mapLocation = promoAdapter.getList().get(position);
+			Intent intent = new Intent(DashboardActivity.this, PromoActivity.class);
+			Bundle bundle = new Bundle();
+			bundle.putInt("bid", (int) mapLocation.getBranchId());
+			bundle.putString("branch", mapLocation.getBranch());
+			intent.putExtras(bundle);
+			startActivity(intent);
+		}
+	}
+
 	@SuppressLint("StaticFieldLeak")
 	private class GetAllLocation extends AsyncTask<String, Integer, Long> {
 		protected Long doInBackground(String... urls) {
+			nearReq = false;
 			new LocationRequestHelperImpl().locationsAll(locationAPIListener);
 			return 1L;
 		}
@@ -726,6 +822,7 @@ public class DashboardActivity extends BaseActivity implements
 
 		GetNearbyLocation(LatLng target) {
 			this.target = target;
+			nearReq = true;
 		}
 
 		protected Long doInBackground(String... urls) {

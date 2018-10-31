@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/item_layout"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:layout_marginStart="@dimen/_12sdp"
+	android:layout_marginEnd="@dimen/_12sdp"
+	android:orientation="vertical"
+	android:paddingTop="@dimen/_10sdp"
+	android:paddingBottom="@dimen/_7sdp">
+
+	<TextView
+		android:id="@+id/company"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:fontFamily="@font/sanfranciscotext_semibold"
+		android:text="@string/app_name"
+		android:textColor="@color/colorBlack"
+		android:textSize="@dimen/_13sdp" />
+
+	<TextView
+		android:id="@+id/branch"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:fontFamily="@font/sanfranciscotext_medium"
+		android:text="@string/app_name"
+		android:textColor="@color/colorBlack"
+		android:textSize="@dimen/_12sdp" />
+
+	<TextView
+		android:id="@+id/count"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="@dimen/_3sdp"
+		android:fontFamily="@font/sanfranciscotext_regular"
+		android:text="@string/app_name"
+		android:textColor="@color/colorBlack"
+		android:textSize="@dimen/_13sdp" />
+
+	<View
+		android:layout_width="match_parent"
+		android:layout_height="1dp"
+		android:layout_marginTop="@dimen/_9sdp"
+		android:background="@color/separatorColor" />
+
+</LinearLayout>

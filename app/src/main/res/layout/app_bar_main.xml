@@ -85,7 +85,7 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_alignParentBottom="true"
-			android:layout_marginBottom="@dimen/_50sdp"
+			android:layout_marginBottom="@dimen/_60sdp"
 			android:alpha="0.9"
 			android:background="@drawable/pop_bubble"
 			android:fontFamily="@font/sanfranciscotext_medium"
@@ -99,5 +99,9 @@
 			android:visibility="visible" />
 
 	</RelativeLayout>
+
+	<include
+		android:id="@+id/bottom_sheet"
+		layout="@layout/bottomsheet_main" />
 
 </android.support.design.widget.CoordinatorLayout>

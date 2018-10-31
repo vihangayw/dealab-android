@@ -53,7 +53,7 @@ public class PromoActivity extends BaseActivity implements BaseSliderView.OnSlid
 	private Promotions promotions;
 
 	private static String formatDay(Date date) {
-		return new SimpleDateFormat("HH:mm:ss dd MMM, yyyy", java.util.Locale.getDefault()).format(date);
+		return new SimpleDateFormat("dd MMM, yyyy", java.util.Locale.getDefault()).format(date);
 	}
 
 	@Override

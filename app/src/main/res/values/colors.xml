@@ -33,5 +33,5 @@
     <color name="colorPrimaryGreen_">#023506</color>
     <color name="colorGradientMiddle">#FF8621EE</color>
     <color name="colorGradientEnd">#9743ef</color>
-    <color name="separatorColor">#f0f4f5</color>
+    <color name="separatorColor">#eaeff1</color>
 </resources>
