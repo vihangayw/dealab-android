@@ -84,6 +84,11 @@
 			android:enabled="true"
 			android:exported="true"
 			android:permission="android.permission.BIND_JOB_SERVICE" />
+
+		<activity
+			android:name=".ui.activity.SettingsActivity"
+			android:label="@string/title_activity_settings"
+			android:screenOrientation="portrait" />
 	</application>
 
 </manifest>

@@ -222,6 +222,8 @@ public class DashboardActivity extends BaseActivity implements
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 			checkLocationPermission();
 		} else buildGoogleApiClient();
+
+		startActivity(new Intent(this, SettingsActivity.class));
 	}
 
 	@Override
