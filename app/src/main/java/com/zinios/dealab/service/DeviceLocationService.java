@@ -27,7 +27,6 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -160,13 +159,13 @@ public class DeviceLocationService extends Service implements LocationListener,
 	@Override
 	public void onLocationChanged(Location location) {
 		if (location != null && DealabApplication.getInstance() != null) {
-			Toast.makeText(this, "onLocationChanged Service", Toast.LENGTH_SHORT).show();
 			UserSessionManager instance = UserSessionManager.getInstance();
 			LatLng latLng = instance.getLastNotificationLocation();
 			if (latLng == null) {
 				instance.saveLastNotificationLocation(location.getLatitude(), location.getLongitude());
 			} else {
 				proceedLocation(latLng, new LatLng(location.getLatitude(), location.getLongitude()));
+				instance.saveLastNotificationLocation(location.getLatitude(), location.getLongitude());
 			}
 		}
 	}
@@ -221,8 +220,9 @@ public class DeviceLocationService extends Service implements LocationListener,
 		Location loc2 = new Location("");
 		loc2.setLatitude(lat2);
 		loc2.setLongitude(lng2);
-
-		return loc1.distanceTo(loc2);
+		float distanceTo = loc1.distanceTo(loc2);
+		Log.i(TAG, "Location diff = " + distanceTo);
+		return distanceTo;
 	}
 
 
