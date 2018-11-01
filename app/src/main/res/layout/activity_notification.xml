@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		xmlns:tools="http://schemas.android.com/tools"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="vertical"
+		tools:context=".ui.activity.NotificationActivity">
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="vertical"
+			android:padding="@dimen/_15sdp">
+
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:ellipsize="end"
+				android:fontFamily="@font/sanfranciscotext_medium"
+				android:maxLines="1"
+				android:text="We found few promotions close to you"
+				android:textColor="@color/colorBlack"
+				android:textSize="@dimen/_12sdp" />
+
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:ellipsize="end"
+				android:fontFamily="@font/sanfranciscotext_medium"
+				android:maxLines="1"
+				android:text="6 promos around you"
+				android:textColor="@color/colorDarkGray"
+				android:textSize="@dimen/_11sdp" />
+
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:ellipsize="end"
+				android:fontFamily="@font/sanfranciscotext_medium"
+				android:maxLines="1"
+				android:text="08:56   3nd Nov, 2018"
+				android:textColor="@color/colorGray"
+				android:textSize="@dimen/_10sdp" />
+
+		</LinearLayout>
+
+		<View
+			android:layout_width="match_parent"
+			android:layout_height="1dp"
+			android:layout_marginStart="@dimen/_10sdp"
+			android:layout_marginEnd="@dimen/_10sdp"
+			android:background="@color/separatorColor" />
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="vertical"
+			android:padding="@dimen/_15sdp">
+
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:ellipsize="end"
+				android:fontFamily="@font/sanfranciscotext_medium"
+				android:maxLines="1"
+				android:text="NoLimit just add a new promotion"
+				android:textColor="@color/colorBlack"
+				android:textSize="@dimen/_12sdp" />
+
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:ellipsize="end"
+				android:fontFamily="@font/sanfranciscotext_medium"
+				android:maxLines="2"
+				android:text="10% off for Sampath bank visa card holders until 06th November"
+				android:textColor="@color/colorDarkGray"
+				android:textSize="@dimen/_11sdp" />
+
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:ellipsize="end"
+				android:fontFamily="@font/sanfranciscotext_medium"
+				android:maxLines="1"
+				android:text="14:15   2nd Nov, 2018"
+				android:textColor="@color/colorGray"
+				android:textSize="@dimen/_10sdp" />
+
+		</LinearLayout>
+
+		<View
+			android:layout_width="match_parent"
+			android:layout_height="1dp"
+			android:layout_marginStart="@dimen/_10sdp"
+			android:layout_marginEnd="@dimen/_10sdp"
+			android:background="@color/separatorColor" />
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="vertical"
+			android:padding="@dimen/_15sdp">
+
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:ellipsize="end"
+				android:fontFamily="@font/sanfranciscotext_medium"
+				android:maxLines="1"
+				android:text="Pizza Hut is proud to Celebrate 25 years"
+				android:textColor="@color/colorBlack"
+				android:textSize="@dimen/_12sdp" />
+
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:ellipsize="end"
+				android:fontFamily="@font/sanfranciscotext_medium"
+				android:maxLines="1"
+				android:text="We are so grateful to you, for being with us during our journey &amp; we look forward to creating more joyous memories with you in the future. So let's raise a slice to the next 25 years with Pizza Hut!"
+				android:textColor="@color/colorDarkGray"
+				android:textSize="@dimen/_11sdp" />
+
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:ellipsize="end"
+				android:fontFamily="@font/sanfranciscotext_medium"
+				android:maxLines="1"
+				android:text="12:50   2nd Nov, 2018"
+				android:textColor="@color/colorGray"
+				android:textSize="@dimen/_10sdp" />
+
+		</LinearLayout>
+
+		<View
+			android:layout_width="match_parent"
+			android:layout_height="1dp"
+			android:layout_marginStart="@dimen/_10sdp"
+			android:layout_marginEnd="@dimen/_10sdp"
+			android:background="@color/separatorColor" />
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="vertical"
+			android:padding="@dimen/_15sdp">
+
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:ellipsize="end"
+				android:fontFamily="@font/sanfranciscotext_medium"
+				android:maxLines="1"
+				android:text="Odel Loyalty"
+				android:textColor="@color/colorBlack"
+				android:textSize="@dimen/_12sdp" />
+
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:ellipsize="end"
+				android:fontFamily="@font/sanfranciscotext_medium"
+				android:maxLines="1"
+				android:text="CELEBRATE with us and get 10% off your purchases when you shop at ODEL or any SOFTLOGIC Fashion Brand Store on your BIRTHDAY! Call now on 114625800. T&amp;C Apply."
+				android:textColor="@color/colorDarkGray"
+				android:textSize="@dimen/_11sdp" />
+
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:ellipsize="end"
+				android:fontFamily="@font/sanfranciscotext_medium"
+				android:maxLines="1"
+				android:text="08:18   2nd Nov, 2018"
+				android:textColor="@color/colorGray"
+				android:textSize="@dimen/_10sdp" />
+
+		</LinearLayout>
+
+		<View
+			android:layout_width="match_parent"
+			android:layout_height="1dp"
+			android:layout_marginStart="@dimen/_10sdp"
+			android:layout_marginEnd="@dimen/_10sdp"
+			android:background="@color/separatorColor" />
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="vertical"
+			android:padding="@dimen/_15sdp">
+
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:ellipsize="end"
+				android:fontFamily="@font/sanfranciscotext_medium"
+				android:maxLines="1"
+				android:text="Keels"
+				android:textColor="@color/colorBlack"
+				android:textSize="@dimen/_12sdp" />
+
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:ellipsize="end"
+				android:fontFamily="@font/sanfranciscotext_medium"
+				android:maxLines="1"
+				android:text="Visit us for a fresh new experience and your favourite Keells deals at Keells. No. 216 A, Thalawathugoda Road, Pitakotte"
+				android:textColor="@color/colorDarkGray"
+				android:textSize="@dimen/_11sdp" />
+
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:ellipsize="end"
+				android:fontFamily="@font/sanfranciscotext_medium"
+				android:maxLines="1"
+				android:text="06:56   2nd Nov, 2018"
+				android:textColor="@color/colorGray"
+				android:textSize="@dimen/_10sdp" />
+
+		</LinearLayout>
+
+		<View
+			android:layout_width="match_parent"
+			android:layout_height="1dp"
+			android:layout_marginStart="@dimen/_10sdp"
+			android:layout_marginEnd="@dimen/_10sdp"
+			android:background="@color/separatorColor" />
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="vertical"
+			android:padding="@dimen/_15sdp">
+
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:ellipsize="end"
+				android:fontFamily="@font/sanfranciscotext_medium"
+				android:maxLines="1"
+				android:text="We found few promotions close to you"
+				android:textColor="@color/colorBlack"
+				android:textSize="@dimen/_12sdp" />
+
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:ellipsize="end"
+				android:fontFamily="@font/sanfranciscotext_medium"
+				android:maxLines="1"
+				android:text="3 promos around you"
+				android:textColor="@color/colorDarkGray"
+				android:textSize="@dimen/_11sdp" />
+
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:ellipsize="end"
+				android:fontFamily="@font/sanfranciscotext_medium"
+				android:maxLines="1"
+				android:text="08:56   2nd Nov, 2018"
+				android:textColor="@color/colorGray"
+				android:textSize="@dimen/_10sdp" />
+
+		</LinearLayout>
+
+		<View
+			android:layout_width="match_parent"
+			android:layout_height="1dp"
+			android:layout_marginStart="@dimen/_10sdp"
+			android:layout_marginEnd="@dimen/_10sdp"
+			android:background="@color/separatorColor" />
+
+
+	</LinearLayout>
+
+</ScrollView>

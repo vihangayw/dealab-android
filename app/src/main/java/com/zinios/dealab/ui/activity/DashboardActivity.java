@@ -223,7 +223,16 @@ public class DashboardActivity extends BaseActivity implements
 			checkLocationPermission();
 		} else buildGoogleApiClient();
 
+	}
+
+	@OnClick(R.id.btn_settings)
+	void settings() {
 		startActivity(new Intent(this, SettingsActivity.class));
+	}
+
+	@OnClick(R.id.btn_notifications)
+	void notificaitons() {
+		startActivity(new Intent(this, NotificationActivity.class));
 	}
 
 	@Override

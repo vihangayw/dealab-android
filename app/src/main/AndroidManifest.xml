@@ -89,6 +89,7 @@
 			android:name=".ui.activity.SettingsActivity"
 			android:label="@string/title_activity_settings"
 			android:screenOrientation="portrait" />
+		<activity android:name=".ui.activity.NotificationActivity"></activity>
 	</application>
 
 </manifest>
