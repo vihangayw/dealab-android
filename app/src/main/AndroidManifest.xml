@@ -14,13 +14,14 @@
 	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
 	<application
 		android:name=".DealabApplication"
 		android:allowBackup="true"
-		android:icon="@mipmap/ic_launcher"
+		android:icon="@mipmap/ic_launcher_"
 		android:label="@string/app_name"
-		android:roundIcon="@mipmap/ic_launcher_round"
+		android:roundIcon="@mipmap/ic_launcher_round_"
 		android:supportsRtl="true"
 		android:theme="@style/AppTheme">
 		<activity
@@ -58,6 +59,31 @@
 			android:configChanges="keyboardHidden|orientation|screenSize"
 			android:screenOrientation="sensor"
 			android:theme="@style/FinestWebViewTheme.Light" />
+
+		<receiver
+			android:name=".receiver.BootReceiver"
+			android:enabled="true"
+			android:exported="true"
+			android:permission="android.permission.BIND_JOB_SERVICE">
+			<intent-filter>
+				<action android:name="android.intent.action.BOOT_COMPLETED" />
+			</intent-filter>
+		</receiver>
+		<receiver
+			android:name=".receiver.SensorStartReceiver"
+			android:enabled="true"
+			android:exported="true"
+			android:permission="android.permission.BIND_JOB_SERVICE">
+			<intent-filter>
+				<action android:name="com.ceffectz.nfc_m2.action.LocationStart" />
+			</intent-filter>
+		</receiver>
+
+		<service
+			android:name=".service.DeviceLocationService"
+			android:enabled="true"
+			android:exported="true"
+			android:permission="android.permission.BIND_JOB_SERVICE" />
 	</application>
 
 </manifest>

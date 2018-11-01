@@ -97,7 +97,8 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.3.2'
     implementation 'com.nineoldandroids:library:2.4.0'
     implementation 'com.daimajia.slider:library:1.1.5@aar'
- }
+    implementation 'com.afollestad.material-dialogs:commons:0.9.5.0'
+}
 
 static def getDate() {
     new Date().format('yyyyMMddHHmmss')

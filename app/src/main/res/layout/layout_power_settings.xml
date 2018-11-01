@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/layout_dialog"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:orientation="vertical">
+
+		<RelativeLayout
+			android:layout_width="match_parent"
+			android:layout_height="0dp"
+			android:layout_weight="1.2"
+			android:background="@color/colorGray">
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_centerInParent="true"
+				android:gravity="center"
+				android:text="Run in Background"
+				android:textColor="@color/colorBlack"
+				android:textSize="@dimen/_15sdp" />
+
+		</RelativeLayout>
+
+		<RelativeLayout
+			android:layout_width="match_parent"
+			android:layout_height="0dp"
+			android:layout_weight="2"
+			android:background="@color/colorWhite">
+
+			<LinearLayout
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_centerInParent="true"
+				android:orientation="vertical">
+
+				<TextView
+					android:id="@+id/txt_order_id"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_gravity="center_horizontal"
+					android:layout_marginStart="@dimen/_6sdp"
+					android:layout_marginEnd="@dimen/_6sdp"
+					android:gravity="center"
+					android:text="Please allow to always run in the background, else our services can\'t be accessed."
+					android:textColor="@color/colorPrimaryDark"
+					android:textSize="@dimen/_14sdp" />
+
+			</LinearLayout>
+
+		</RelativeLayout>
+
+		<RelativeLayout
+			android:layout_width="match_parent"
+			android:layout_height="0dp"
+			android:layout_weight="2.8"
+			android:background="@color/colorWhite">
+
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_centerInParent="true"
+				android:orientation="horizontal"
+				android:paddingStart="@dimen/_15sdp"
+				android:paddingEnd="@dimen/_15sdp">
+
+				<RelativeLayout
+					android:layout_width="0dp"
+					android:layout_height="match_parent"
+					android:layout_weight="1">
+
+					<RelativeLayout
+						android:id="@+id/btn_ok"
+						android:layout_width="@dimen/_46sdp"
+						android:layout_height="@dimen/_46sdp"
+						android:layout_centerInParent="true"
+						android:background="@drawable/button_yellow">
+
+						<ImageView
+							android:layout_width="@dimen/_22sdp"
+							android:layout_height="@dimen/_22sdp"
+							android:layout_centerInParent="true"
+							android:src="@drawable/ic_settings"
+							android:tint="@color/colorWhite" />
+
+					</RelativeLayout>
+
+				</RelativeLayout>
+
+				<RelativeLayout
+					android:layout_width="0dp"
+					android:layout_height="match_parent"
+					android:layout_weight="1">
+
+					<RelativeLayout
+						android:id="@+id/btn_cancel"
+						android:layout_width="@dimen/_46sdp"
+						android:layout_height="@dimen/_46sdp"
+						android:layout_centerInParent="true"
+						android:background="@drawable/button_red">
+
+						<ImageView
+							android:layout_width="@dimen/_22sdp"
+							android:layout_height="@dimen/_22sdp"
+							android:layout_centerInParent="true"
+							android:src="@drawable/ic_close"
+							android:tint="@color/colorWhite" />
+
+					</RelativeLayout>
+
+				</RelativeLayout>
+
+			</LinearLayout>
+
+		</RelativeLayout>
+
+	</LinearLayout>
+
+</RelativeLayout>

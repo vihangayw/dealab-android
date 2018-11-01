@@ -109,6 +109,22 @@ public class DealabApplication extends MultiDexApplication {
 		return false;
 	}
 
+	/**
+	 * Check whether a given service is running in the application or not.
+	 *
+	 * @param serviceClass - given service
+	 * @return - service running or not
+	 */
+	public boolean isServiceRunning(Class<?> serviceClass) {
+		ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+		if (manager == null) return false;
+		for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+			if (serviceClass.getName().equals(service.service.getClassName())) {
+				return true;
+			}
+		}
+		return false;
+	}
 	public void showError(Error error) {
 		if (error != null) {
 			if (!TextUtils.isEmpty(error.getMessage()))

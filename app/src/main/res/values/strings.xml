@@ -1,5 +1,5 @@
 <resources>
-	<string name="app_name">dealab-android</string>
+	<string name="app_name">Dealab</string>
 	<string name="no_network">No Network</string>
 	<string name="title_activity_main">MainActivity</string>
 	<string name="navigation_drawer_open">Open navigation drawer</string>
@@ -16,4 +16,5 @@
 	<string name="promos">promotions</string>
 	<string name="updating">Updating…</string>
 	<string name="search">Search</string>
+	<string name="notification_text">We found few promotions close to you</string>
 </resources>

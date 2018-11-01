@@ -10,6 +10,7 @@ import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
@@ -37,10 +38,13 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.florent37.viewanimator.AnimationListener;
 import com.github.florent37.viewanimator.ViewAnimator;
 import com.google.android.gms.common.ConnectionResult;
@@ -84,7 +88,10 @@ import com.zinios.dealab.api.response.Error;
 import com.zinios.dealab.api.response.LocationListResponse;
 import com.zinios.dealab.model.MapLocation;
 import com.zinios.dealab.model.MarkerItem;
+import com.zinios.dealab.receiver.SensorStartReceiver;
+import com.zinios.dealab.service.DeviceLocationService;
 import com.zinios.dealab.ui.adapter.PromoAdapter;
+import com.zinios.dealab.util.UserSessionManager;
 import com.zinios.dealab.util.UtilityManager;
 import com.zinios.dealab.widget.LatLngInterpolator;
 
@@ -96,6 +103,8 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static com.zinios.dealab.util.Constants.POWER_MANAGER_INTENTS;
 
 public class DashboardActivity extends BaseActivity implements
 		OnMapReadyCallback,
@@ -218,8 +227,98 @@ public class DashboardActivity extends BaseActivity implements
 	@Override
 	protected void onStart() {
 		super.onStart();
-
+		if (!UserSessionManager.getInstance().isPowerManagerAllowed()) {
+			for (Intent intent : POWER_MANAGER_INTENTS) {
+				if (getPackageManager().resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY) != null) {
+					powerSettings(this, intent);
+					return;
+				}
+			}
+			UserSessionManager.getInstance().setPowerManagerAllowed();
+		}
+		if (!DealabApplication.getInstance().isServiceRunning(DeviceLocationService.class)) {
+			Log.d(SensorStartReceiver.class.getSimpleName(), "DeviceLocationService starting...");
+			Intent service = new Intent(this, DeviceLocationService.class);
+			Bundle bundle = new Bundle();
+			service.putExtras(bundle);
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+				startForegroundService(service);
+			} else {
+				startService(service);
+			}
+		} else {
+			Log.d(SensorStartReceiver.class.getSimpleName(), "DeviceLocationService is already running...");
+		}
 		enableLocation();
+	}
+
+	/**
+	 * Show material dialog to go to settings of the power settings of the phone.
+	 * Enable the settings to allow the app to run on background.
+	 * This setting should be enabled in the setting in oder to enable the gesture feature.
+	 * <p>
+	 * Once the settings button is clicked Preferences:IS_PM_ALLOWED will save to allowed which will
+	 * not allow the app to show this alert again.
+	 *
+	 * @param context - current context
+	 * @param intent  - settings intent to open
+	 */
+	public void powerSettings(final Context context, final Intent intent) {
+		MaterialDialog.Builder builder = new MaterialDialog.Builder(context)
+				.customView(R.layout.layout_power_settings, false).cancelable(true);
+		final MaterialDialog dialog = builder.build();
+		View customView = dialog.getCustomView();
+		if (customView != null) {
+			RelativeLayout relativeLayout = customView.findViewById(R.id.layout_dialog);
+			FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) relativeLayout.getLayoutParams();
+			layoutParams.height = getHeight(0);
+			relativeLayout.setLayoutParams(layoutParams);
+
+			View btnOk = customView.findViewById(R.id.btn_ok);
+			View btnCancel = customView.findViewById(R.id.btn_cancel);
+
+			btnCancel.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					dialog.dismiss();
+				}
+			});
+			btnOk.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					startActivity(intent);
+					UserSessionManager.getInstance().setPowerManagerAllowed();
+					dialog.dismiss();
+				}
+			});
+		}
+		dialog.show();
+	}
+
+	/**
+	 * Get a fixed height for the material dialog alert.
+	 * Calculate height using density and resolution of the screen
+	 *
+	 * @param reduce - reduce this amount from the calculated height
+	 * @return - final height
+	 */
+	private int getHeight(double reduce) {
+		Point size = new Point();
+		getWindowManager().getDefaultDisplay().getSize(size);
+		final int calcHeight;
+		float density = getResources().getDisplayMetrics().density;
+		if (density > 2.0) { //xxhdpi
+			calcHeight = (int) ((size.y) * (0.49 - reduce));
+		} else if (density > 1.5) { //xhdpi
+			calcHeight = (int) (size.y * (0.57 - reduce));
+		} else if (density > 1.0) { //hdpi
+			calcHeight = (int) (size.y * (0.59 - reduce));
+		} else if (density > 0.75) { //mdpi
+			calcHeight = (int) (size.y * (0.55 - reduce));
+		} else { //ldpi
+			calcHeight = (int) (size.y * (0.54 - reduce));
+		}
+		return calcHeight;
 	}
 
 	@Override
