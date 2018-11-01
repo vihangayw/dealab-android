@@ -235,6 +235,11 @@ public class DashboardActivity extends BaseActivity implements
 		startActivity(new Intent(this, NotificationActivity.class));
 	}
 
+	@OnClick(R.id.fab_filter)
+	void filter() {
+		startActivity(new Intent(this, FilterActivity.class));
+	}
+
 	@Override
 	protected void onStart() {
 		super.onStart();

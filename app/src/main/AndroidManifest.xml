@@ -28,14 +28,7 @@
 			android:name=".ui.activity.DashboardActivity"
 			android:label="@string/title_activity_main"
 			android:screenOrientation="portrait"
-			android:theme="@style/AppTheme.NoActionBar">
-			<intent-filter>
-				<action android:name="android.intent.action.MAIN" />
-				<action android:name="android.intent.action.VIEW" />
-
-				<category android:name="android.intent.category.LAUNCHER" />
-			</intent-filter>
-		</activity>
+			android:theme="@style/AppTheme.NoActionBar" />
 		<!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -89,7 +82,24 @@
 			android:name=".ui.activity.SettingsActivity"
 			android:label="@string/title_activity_settings"
 			android:screenOrientation="portrait" />
-		<activity android:name=".ui.activity.NotificationActivity"></activity>
+		<activity
+			android:name=".ui.activity.NotificationActivity"
+			android:screenOrientation="portrait" />
+		<activity
+			android:name=".ui.activity.FilterActivity"
+			android:screenOrientation="portrait"
+			android:theme="@style/AppTheme1.NoActionBar" />
+		<activity
+			android:name=".ui.activity.SplashActivity"
+			android:screenOrientation="portrait"
+			android:theme="@style/AppTheme.NoActionBar">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+				<action android:name="android.intent.action.VIEW" />
+
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+		</activity>
 	</application>
 
 </manifest>
