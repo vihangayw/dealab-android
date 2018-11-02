@@ -90,4 +90,10 @@
 	<string name="pref_ringtone_silent">Silent</string>
 
 	<string name="pref_title_vibrate">Vibrate</string>
+	<string name="waiting_for_location">waiting for location</string>
+	<string name="ar_not_supported">AR Not Supported</string>
+	<string name="ar_not_support_title">Alert</string>
+	<string name="gps_disabled_ar">Locations Service id Disabled</string>
+	<string name="enable_gps_ar">Please enable GPS and try again</string>
+	<string name="no_spots_available">No nearby promotions available</string>
 </resources>

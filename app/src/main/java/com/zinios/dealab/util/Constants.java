@@ -30,4 +30,7 @@ public class Constants {
 			new Intent().setComponent(new ComponentName("com.asus.mobilemanager",
 					"com.asus.mobilemanager.MainActivity"))
 	};
+
+	public static final String NEAR_BY_SPOTS_LAT = "d_lat";
+	public static final String NEAR_BY_SPOTS_LNG = "d_lng";
 }

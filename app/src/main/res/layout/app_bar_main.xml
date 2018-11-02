@@ -70,6 +70,10 @@
 
 			<de.hdodenhof.circleimageview.CircleImageView
 				android:layout_width="@dimen/_30sdp"
+				android:id="@+id/btn_ar"
+				android:background="?attr/selectableItemBackgroundBorderless"
+				android:clickable="true"
+				android:focusable="true"
 				android:layout_height="match_parent"
 				android:layout_gravity="center_vertical"
 				android:padding="@dimen/_3sdp"

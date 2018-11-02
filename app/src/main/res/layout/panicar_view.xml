@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:id="@+id/arMainLayout"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:tag="arMainLayout">
+
+	<com.zinios.dealab.util.par.PARCameraView
+		android:id="@+id/arCameraView"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:layout_centerInParent="true"
+		android:tag="arCameraView" />
+
+	<com.zinios.dealab.util.par.PARView
+		android:id="@+id/arContentView"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:tag="arContentView" />
+
+	<View
+		android:id="@+id/ovalay"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:background="@color/transparent_black_hex_22" />
+
+	<ProgressBar
+		android:id="@+id/progress"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_above="@id/txt_center"
+		android:layout_centerHorizontal="true"
+		android:indeterminate="true" />
+
+	<TextView
+		android:id="@+id/txt_center"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_centerInParent="true"
+		android:shadowColor="@color/transparent_black_hex_22"
+		android:shadowDx="0"
+		android:shadowDy="0"
+		android:shadowRadius="1"
+		android:text="@string/please_wait"
+		android:textColor="@color/colorPrimaryDark"
+		android:textSize="@dimen/_12sdp" />
+
+	<RelativeLayout
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_alignParentTop="true"
+		android:layout_alignParentEnd="true"
+		android:layout_alignParentRight="true"
+		android:layout_margin="@dimen/_10sdp">
+
+		<ImageView
+			android:layout_width="92dp"
+			android:layout_height="92dp"
+			android:layout_alignParentTop="true"
+			android:layout_centerHorizontal="true"
+			android:layout_marginTop="-9dp"
+			app:srcCompat="@drawable/ic_signal_wifi_0_bar_black_24dp" />
+
+		<ImageView
+			android:layout_width="@dimen/_130sdp"
+			android:layout_height="@dimen/_130sdp"
+			android:layout_centerInParent="true"
+			android:background="@drawable/ring_transparent"
+			android:gravity="center" />
+
+		<com.zinios.dealab.util.par.PARRadarView
+			android:id="@+id/arRadarView"
+			android:layout_width="@dimen/_130sdp"
+			android:layout_height="@dimen/_130sdp"
+			android:layout_centerInParent="true"
+			android:background="@drawable/circle_trans"
+			android:gravity="center"
+			android:tag="arRadarView" />
+
+	</RelativeLayout>
+
+	<de.hdodenhof.circleimageview.CircleImageView
+		android:id="@+id/back_icon"
+		android:layout_width="@dimen/_22sdp"
+		android:layout_height="@dimen/_22sdp"
+		android:layout_margin="@dimen/_5sdp"
+		android:src="@drawable/ar_back_icon"
+		app:civ_border_color="@color/colorPrimary"
+		app:civ_border_width="1.5dip"
+		app:civ_fill_color="@color/Color_White" />
+
+</RelativeLayout>

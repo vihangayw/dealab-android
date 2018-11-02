@@ -91,6 +91,7 @@ import com.zinios.dealab.model.MarkerItem;
 import com.zinios.dealab.receiver.SensorStartReceiver;
 import com.zinios.dealab.service.DeviceLocationService;
 import com.zinios.dealab.ui.adapter.PromoAdapter;
+import com.zinios.dealab.util.Constants;
 import com.zinios.dealab.util.UserSessionManager;
 import com.zinios.dealab.util.UtilityManager;
 import com.zinios.dealab.widget.LatLngInterpolator;
@@ -116,6 +117,7 @@ public class DashboardActivity extends BaseActivity implements
 	private final int MY_PERMISSIONS_REQUEST_LOCATION = 33;
 	private final int LOCATION_ENABLE = 4910;
 	private final int PLACE_PICKER_REQUEST = 101;
+	private final int PERMISSIONS_REQUEST_ACCESS_CAMERA = 39;
 
 	BottomSheetBehavior bottomSheetBehavior;
 	@BindView(R.id.bottom_sheet)
@@ -228,6 +230,34 @@ public class DashboardActivity extends BaseActivity implements
 	@OnClick(R.id.btn_settings)
 	void settings() {
 		startActivity(new Intent(this, SettingsActivity.class));
+	}
+
+	@OnClick(R.id.btn_ar)
+	void showAR() {
+		if (mLastLocation != null) {
+			cameraAction();
+		} else {
+			UtilityManager.showSnack("Waiting for Current Location", Snackbar.LENGTH_LONG, coordinatorLayout);
+		}
+	}
+
+	private void cameraAction() {
+		if (ContextCompat.checkSelfPermission(this,
+				Manifest.permission.CAMERA)
+				== PackageManager.PERMISSION_GRANTED) {
+			showArActivity();
+		} else {
+			ActivityCompat.requestPermissions(this,
+					new String[]{Manifest.permission.CAMERA},
+					PERMISSIONS_REQUEST_ACCESS_CAMERA);
+		}
+	}
+
+	private void showArActivity() {
+		Intent intent = new Intent(this, ARActivity.class);
+		intent.putExtra(Constants.NEAR_BY_SPOTS_LAT, mLastLocation.getLatitude());
+		intent.putExtra(Constants.NEAR_BY_SPOTS_LNG, mLastLocation.getLongitude());
+		startActivity(intent);
 	}
 
 	@OnClick(R.id.btn_notifications)
@@ -473,6 +503,13 @@ public class DashboardActivity extends BaseActivity implements
 	                                       @NonNull String permissions[],
 	                                       @NonNull int[] grantResults) {
 		switch (requestCode) {
+			case PERMISSIONS_REQUEST_ACCESS_CAMERA:
+				// If request is cancelled, the result arrays are empty.
+				if (grantResults.length > 0
+						&& grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+					showArActivity();
+				}
+				break;
 			case MY_PERMISSIONS_REQUEST_LOCATION:
 				// If request is cancelled, the result arrays are empty.
 				if (grantResults.length > 0
