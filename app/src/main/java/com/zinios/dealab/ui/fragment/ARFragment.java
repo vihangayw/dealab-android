@@ -158,6 +158,7 @@ public class ARFragment extends PARFragment implements PARFragment.LocationChang
 				poi.setLongitude(mapLocation.getLng());
 				poi.setOpenClose("Open Now");
 				poi.setOpenTime("08.30 AM");
+				poi.setDeal("Promotions - " + mapLocation.getDealCount());
 				poi.setPlaceTitle(mapLocation.getCompany());
 				POIType poiType = POIType.green;
 				if (i % 3 == 0) {

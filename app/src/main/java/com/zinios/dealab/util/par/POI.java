@@ -18,11 +18,20 @@ public class POI implements Serializable {
 	private POIType poiType;
 	private double distance;
 	private double altitude;
+	private String deal;
 
 	private int width;
 	private int height;
 
 	public POI() {
+	}
+
+	public String getDeal() {
+		return deal;
+	}
+
+	public void setDeal(String deal) {
+		this.deal = deal;
 	}
 
 	public POI(String id, String placeTitle, String openClose, String openTime, double latitude, double longitude, POIType poiType) {

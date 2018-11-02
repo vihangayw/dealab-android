@@ -63,16 +63,16 @@
 			app:srcCompat="@drawable/ic_signal_wifi_0_bar_black_24dp" />
 
 		<ImageView
-			android:layout_width="@dimen/_130sdp"
-			android:layout_height="@dimen/_130sdp"
+			android:layout_width="150dp"
+			android:layout_height="150dp"
 			android:layout_centerInParent="true"
 			android:background="@drawable/ring_transparent"
 			android:gravity="center" />
 
 		<com.zinios.dealab.util.par.PARRadarView
 			android:id="@+id/arRadarView"
-			android:layout_width="@dimen/_130sdp"
-			android:layout_height="@dimen/_130sdp"
+			android:layout_width="150dp"
+			android:layout_height="150dp"
 			android:layout_centerInParent="true"
 			android:background="@drawable/circle_trans"
 			android:gravity="center"
@@ -84,7 +84,7 @@
 		android:id="@+id/back_icon"
 		android:layout_width="@dimen/_22sdp"
 		android:layout_height="@dimen/_22sdp"
-		android:layout_margin="@dimen/_5sdp"
+		android:layout_margin="@dimen/_13sdp"
 		android:src="@drawable/ar_back_icon"
 		app:civ_border_color="@color/colorPrimary"
 		app:civ_border_width="1.5dip"

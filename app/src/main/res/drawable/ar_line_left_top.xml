@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+	<item>
+		<rotate android:fromDegrees="30" android:toDegrees="30">
+			<shape android:shape="line">
+				<stroke android:width="@dimen/_1sdp" android:color="@color/Color_DarkMagenta" />
+			</shape>
+		</rotate>
+	</item>
+</selector>

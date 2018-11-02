@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="@dimen/_220sdp"
+	android:layout_height="@dimen/_110sdp">
+
+	<View
+		android:id="@+id/line"
+		android:layout_width="@dimen/_34sdp"
+		android:layout_height="@dimen/_34sdp"
+		android:layout_alignParentBottom="true"
+		android:layout_marginEnd="-5dp"
+		android:layout_toStartOf="@id/dot"
+		android:background="@drawable/ar_line_left_top" />
+
+	<View
+		android:id="@+id/dot"
+		android:layout_width="@dimen/_10sdp"
+		android:layout_height="@dimen/_10sdp"
+		android:layout_alignParentBottom="true"
+		android:layout_centerHorizontal="true"
+		android:background="@drawable/circle_trans_" />
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="@dimen/_60sdp"
+		android:layout_above="@id/line"
+		android:layout_marginBottom="-11dp"
+		android:background="@drawable/ar_rect_"
+		android:orientation="vertical">
+
+		<TextView
+			android:id="@+id/txt_company"
+			android:layout_width="match_parent"
+			android:layout_height="0dp"
+			android:layout_gravity="center"
+			android:layout_weight="1"
+			android:ellipsize="end"
+			android:gravity="center"
+			android:maxLines="2"
+			android:shadowColor="@color/Color_DarkMagenta"
+			android:shadowDx="2"
+			android:shadowDy="2"
+			android:shadowRadius="2"
+			android:text="@string/app_name"
+			android:textColor="#190135"
+			android:textSize="@dimen/_15sdp" />
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content">
+
+			<TextView
+				android:id="@+id/txt_deal"
+				android:layout_width="0dp"
+				android:layout_height="@dimen/_25sdp"
+				android:layout_weight="1"
+				android:background="@drawable/ar_rect__"
+				android:gravity="center"
+				android:text="@string/app_name"
+				android:textColor="@color/colorWhite"
+				android:textSize="@dimen/_11sdp" />
+
+			<TextView
+				android:id="@+id/txt_distance"
+				android:layout_width="0dp"
+				android:layout_height="match_parent"
+				android:layout_gravity="center"
+				android:layout_weight="1"
+				android:background="@drawable/ar_rect___"
+				android:gravity="center"
+				android:text="@string/app_name"
+				android:textColor="@color/Color_DarkMagenta"
+				android:textSize="@dimen/_13sdp" />
+
+		</LinearLayout>
+
+	</LinearLayout>
+
+
+</RelativeLayout>

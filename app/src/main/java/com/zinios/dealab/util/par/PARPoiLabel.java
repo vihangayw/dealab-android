@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Point;
 import android.location.Location;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -27,9 +26,9 @@ public class PARPoiLabel extends PARPoi {
 	protected String _distance;
 	protected POI poi;
 	protected TextView txtDistance;
-	protected TextView txtOpenTime;
+	//	protected TextView txtOpenTime;
 	protected TextView txtTitle;
-	protected TextView txtOpenClose;
+	protected TextView txtDeal;
 	protected float _lastUpdateAtDistance;
 	protected Point offset = new Point();
 	private String TAG = "PARPoiLabel";
@@ -98,11 +97,11 @@ public class PARPoiLabel extends PARPoi {
 				if (this.onClickListener != null) {
 					this._labelView.setOnClickListener(this.onClickListener);
 				}
-
+//
 				if (this.size == null) {
 					this.size = new Point(defaultSize.x, defaultSize.y);
 				}
-
+//
 				Resources r = this._labelView.getResources();
 				int width = (int) TypedValue.applyDimension(1, (float) this.size.x, r.getDisplayMetrics());
 				int height = (int) TypedValue.applyDimension(1, (float) this.size.y, r.getDisplayMetrics());
@@ -111,36 +110,36 @@ public class PARPoiLabel extends PARPoi {
 				if (this._backgroundImageResource > -1) {
 					this._labelView.setBackgroundResource(this._backgroundImageResource);
 				}
-
-				this.txtTitle = this._labelView.findViewById(R.id.poi_name);
-				this.txtOpenClose = this._labelView.findViewById(R.id.open_close);
-				this.txtDistance = this._labelView.findViewById(R.id.distance);
-				this.txtOpenTime = this._labelView.findViewById(R.id.open_time);
-
+//
+				this.txtTitle = this._labelView.findViewById(R.id.txt_company);
+				this.txtDeal = this._labelView.findViewById(R.id.txt_deal);
+				this.txtDistance = this._labelView.findViewById(R.id.txt_distance);
+//				this.txtOpenTime = this._labelView.findViewById(R.id.open_time);
+//
 				this.txtTitle.setText(this.poi.getPlaceTitle());
-				this.txtOpenTime.setText(this.poi.getOpenTime());
-				this.txtOpenClose.setText(this.poi.getOpenClose());
-
+//				this.txtOpenTime.setText(this.poi.getOpenTime());
+				this.txtDeal.setText(this.poi.getDeal());
+//
 				switch (this.poi.getPoiType()) {
 					case red:
-						this.txtTitle.setBackgroundResource(R.drawable.bg_poi_blue);
-						this.txtOpenClose.setTextColor(ContextCompat.getColor(ctx, R.color.colorPrimary));
+//						this.txtTitle.setBackgroundResource(R.drawable.bg_poi_blue);
+//						this.txtDeal.setTextColor(ContextCompat.getColor(ctx, R.color.colorPrimary));
 						break;
 					case blue:
-						this.txtTitle.setBackgroundResource(R.drawable.bg_poi_blue);
-						this.txtOpenClose.setTextColor(ContextCompat.getColor(ctx, R.color.colorPrimary));
+//						this.txtTitle.setBackgroundResource(R.drawable.bg_poi_blue);
+//						this.txtDeal.setTextColor(ContextCompat.getColor(ctx, R.color.colorPrimary));
 						break;
 					case green:
-						this.txtTitle.setBackgroundResource(R.drawable.bg_poi_blue);
-						this.txtOpenClose.setTextColor(ContextCompat.getColor(ctx, R.color.colorPrimary));
+//						this.txtTitle.setBackgroundResource(R.drawable.bg_poi_blue);
+//						this.txtDeal.setTextColor(ContextCompat.getColor(ctx, R.color.colorPrimary));
 						break;
 					case orange:
-						this.txtTitle.setBackgroundResource(R.drawable.bg_poi_blue);
-						this.txtOpenClose.setTextColor(ContextCompat.getColor(ctx, R.color.colorPrimary));
+//						this.txtTitle.setBackgroundResource(R.drawable.bg_poi_blue);
+//						this.txtDeal.setTextColor(ContextCompat.getColor(ctx, R.color.colorPrimary));
 						break;
 					default:
-						this.txtTitle.setBackgroundResource(R.drawable.bg_poi_blue);
-						this.txtOpenClose.setTextColor(ContextCompat.getColor(ctx, R.color.colorPrimary));
+//						this.txtTitle.setBackgroundResource(R.drawable.bg_poi_blue);
+//						this.txtDeal.setTextColor(ContextCompat.getColor(ctx, R.color.colorPrimary));
 						break;
 				}
 
