@@ -34,7 +34,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class PromoActivity extends BaseActivity implements BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener {
+public class PromoActivity extends BaseActivity implements
+		BaseSliderView.OnSliderClickListener,
+		ViewPagerEx.OnPageChangeListener {
 
 	@BindView(R.id.title)
 	TextView txtTitle;

@@ -44,10 +44,9 @@ public class PromoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 	private void bindViewHolder(ViewHolder holder, int position) {
 		MapLocation location = this.items.get(position);
 		if (location != null) {
-			holder.txtCompany.setText(!TextUtils.isEmpty(location.getCompany())
-					? location.getCompany() : "-");
-			holder.txtBranch.setText(!TextUtils.isEmpty(location.getBranch())
+			holder.txtCompany.setText(!TextUtils.isEmpty(location.getBranch())
 					? location.getBranch() : "-");
+			holder.txtBranch.setVisibility(View.GONE);
 			holder.txtCount.setText(String.valueOf(location.getDealCount()).concat(" ")
 					.concat(location.getDealCount() > 1 ? "Promotions" : "Promotion"));
 		}

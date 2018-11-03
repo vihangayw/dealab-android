@@ -171,6 +171,7 @@ public class DeviceLocationService extends Service implements LocationListener,
 	}
 
 	private void proceedLocation(LatLng oldLocation, LatLng newLocation) {
+		//showNotification(this,"Tap to view all promotions");
 		if (distanceBetween(oldLocation.latitude, oldLocation.longitude,
 				newLocation.latitude, newLocation.longitude) > 500) { //more than 500m
 			if (DealabApplication.getInstance().isNetworkConnected()) {
@@ -268,7 +269,7 @@ public class DeviceLocationService extends Service implements LocationListener,
 		Intent intent = new Intent(context, DashboardActivity.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 		PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
-		Drawable drawable = ContextCompat.getDrawable(context, R.mipmap.ic_launcher_round_);
+		Drawable drawable = ContextCompat.getDrawable(context, R.mipmap.ic_launcher_);
 		if (drawable == null) return;
 		Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
 

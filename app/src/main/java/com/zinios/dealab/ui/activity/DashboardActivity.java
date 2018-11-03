@@ -1024,7 +1024,7 @@ public class DashboardActivity extends BaseActivity implements
 
 					multiProfile = LayoutInflater.from(mContext).inflate(R.layout.marker_layout, null);
 					title = multiProfile.findViewById(R.id.title);
-					title.setText(item.getMapLocation().getCompany()
+					title.setText(item.getMapLocation().getBranch()
 							.concat("\n")
 							.concat(String.valueOf(item.getMapLocation().getDealCount())
 									.concat(" Available")));
